@@ -11,12 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RestConsumerApplicationTests {
+
+    private static final String BASE_URL = "https://api.zonky.cz/loans/marketplace?datePublished__gt=";
+    private static final String CORRUPTED_URL = "https://api.zonky.cz/loans/marketplace/datePublished";
 
 	@Autowired
 	private LoanController loanController;
@@ -28,7 +32,7 @@ public class RestConsumerApplicationTests {
 	@Test
 	public void testLoanController_getLoans_statusOk() {
 
-	    final ResponseEntity result = loanController.fetchLoans();
+	    final ResponseEntity result = loanController.fetchLoans(BASE_URL);
 
         final Collection<LoanDTO> loans = (Collection<LoanDTO>) result.getBody();
 
@@ -37,6 +41,11 @@ public class RestConsumerApplicationTests {
 		Assert.assertEquals(MediaType.APPLICATION_JSON_UTF8, result.getHeaders().getContentType());
         Assert.assertNotNull(loans);
 	}
+
+	@Test(expected = HttpClientErrorException.class)
+    public void testLoanController_getLoans_statusBadRequest() {
+	    loanController.fetchLoans(CORRUPTED_URL);
+    }
 
 }
 

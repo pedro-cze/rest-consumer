@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -15,19 +16,17 @@ import java.util.Collection;
 @RestController
 public class LoanController {
 
-    private static final String BASE_URL = "https://api.zonky.cz/loans/marketplace";
-
     private static final Logger logger = LoggerFactory.getLogger(LoanController.class);
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public ResponseEntity<Collection<LoanDTO>> fetchLoans() {
+    public ResponseEntity<Collection<LoanDTO>> fetchLoans(String baseUrl) throws HttpClientErrorException {
 
-        logger.info("Sending request to: {}", BASE_URL);
+        logger.info("Sending request to: {}", baseUrl);
 
         final ResponseEntity<Collection<LoanDTO>> result = restTemplate.exchange(
-                BASE_URL,
+                baseUrl,
                 HttpMethod.GET,
                 new HttpEntity<>(initHeaders()),
                 new ParameterizedTypeReference<Collection<LoanDTO>>() {
