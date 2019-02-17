@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
@@ -28,9 +27,10 @@ public class DateTimeServiceTest {
         Assert.assertEquals("2019-12-20T09:50:00", dateTimeService.getDateString(DATE_FORMAT, localDateTime));
     }
 
-    @Test(expected = DateTimeException.class)
+    @Test
     public void testDateTimeService_getIncorrectDate() {
-        dateTimeService.getDateString(INCORRECT_DATE_FORMAT, LocalDateTime.now());
+        final String result = dateTimeService.getDateString(INCORRECT_DATE_FORMAT, LocalDateTime.now());
+        Assert.assertEquals("", result);
     }
 
 }
