@@ -5,4 +5,4 @@ from "https://api.zonky.cz/loans/marketplace" using the Spring Boot's RestContro
 
 After successful call it prints fetched Loans into the console.
 
-The process of fetching current Loans is repeated every five minutes.
+The process of fetching new Loans is repeated every five minutes.
